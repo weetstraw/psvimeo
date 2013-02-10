@@ -60,7 +60,7 @@
 			
 			if(empty($title)) $title="Videos";
 			
-			$data=$this->vimeo($album,$limit);
+			$data=$this->vimeo($album,$limit,$baseurl);
 						
 			if(false !== $data && isset($data->videos))
 			{	
@@ -70,8 +70,9 @@
 				
 				foreach($data->videos as $row){
 					echo '<li>';
-					echo '<a href="'.$baseurl.$row['id'].'" title="'.$row['title'].'">.</a>';
+					echo '<a href="'.$baseurl.$row['id'].'" title="'.$row['title'].'">';
 					echo '<img class="video_icon" src="'.plugins_url('psvimeowidget/images/video-icon.png').'" alt="Play Buton" />';
+					echo '</a>';
 					echo '<img class="video_thumbnail" src="'.$row['thumb'].'" alt="'.$row['title'].'"/>';					
 					echo '</li>';
 				}
@@ -81,20 +82,20 @@
 			}
 		}
 		
-		private function vimeo($album,$limit)
+		private function vimeo($album,$limit,$baseurl)
 		{
 			if(empty($album)) return false;
 			
 			$videos=get_transient('recent_videos');
 						
 			if(!$videos || $videos->album != $album || $videos->limit != $limit || $videos->baseurl != $baseurl){
-				return $this->get_videos($album,$limit);
+				return $this->get_videos($album,$limit,$baseurl);
 			}else{
 				return $videos;
 			}
 		}
 		
-		private function get_videos($album,$limit)
+		private function get_videos($album,$limit,$baseurl)
 		{
 			$video_list=wp_remote_get('http://www.vimeo.com/api/v2/album/'.$album.'/videos.json');
 			$video_list=json_decode($video_list['body']);

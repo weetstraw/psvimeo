@@ -1,6 +1,7 @@
 .widget_ps_vimeoalbum {width:100%;}
 .widget_ps_vimeoalbum ul.video_list {overflow:hidden;} 
 .widget_ps_vimeoalbum ul.video_list li {float:left; position:relative; width:100px; height:75px;}
-.widget_ps_vimeoalbum ul.video_list li a {position:absolute; width:100px; height:75px; margin:0; font-size:1px; opacity:0; z-index:999;}
-.widget_ps_vimeoalbum ul.video_list li .video_thumbnail {width:100px; height:75px; border:2px solid #FFF;}
-.widget_ps_vimeoalbum ul.video_list li .video_icon {position:absolute; width:40px; height:40px; margin:25px 30px;}
+.widget_ps_vimeoalbum ul.video_list li .video_thumbnail {width:100px; height:75px;}
+
+.widget_ps_vimeoalbum ul.video_list li .video_icon {position:absolute; margin:0; opacity:.5;}
+.widget_ps_vimeoalbum ul.video_list li .video_icon:hover {opacity:1;}
