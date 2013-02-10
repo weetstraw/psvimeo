@@ -4,7 +4,7 @@
 	Plugin Name: PS Vimeo Album
 	Plugin URI: http://www.petersurrena.com
 	Description: It's a Vimeo thing
-	Version 0.5
+	Version: 0.5
 	Author: Peter Surrena
 	Author URI: http://www.petersurrena.com
 	*/
@@ -60,13 +60,13 @@
 			{	
 				echo $before_widget;
 				echo $before_title.$title.$after_title;
-				echo '<div class="psvimeo_album">';								
 				echo '<ul class="video_list">';
 				
 				foreach($data->videos as $row){
 					echo '<li>';
+					AMQPConnection
 					echo '<img class="video_icon" src="'.plugins_url('psvimeowidget/images/video-icon.png').'" alt="Play Buton" />';
-					echo '<a href="'.$row['url'].'" title="'.$row['title'].'"><img src="'.$row['thumb'].'" alt="'.$row['title'].'"/></a>';
+					echo '<img class="video_thumbnail" src="'.$row['thumb'].'" alt="'.$row['title'].'"/>';					
 					echo '</li>';
 				}
 
