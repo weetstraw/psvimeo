@@ -45,6 +45,12 @@
 			echo '<input class="widefat" type="number" min="1" max="99" id="'.$this->get_field_id('limit').'" name="'.$this->get_field_name('limit').'" value="';
 			echo !empty($limit) ? $limit : 9;
 			echo '"/></p>';
+			
+			// Base Url
+			echo '<p><label for="'.$this->get_field_id('baseurl').'">Base URL:</label>';
+			echo '<input class="widefat" max="99" id="'.$this->get_field_id('baseurl').'" name="'.$this->get_field_name('baseurl').'" value="';
+			echo !empty($baseurl) ? esc_attr($baseurl) : 'https://www.vimeo.com/';
+			echo '"/></p>';
 		}
 		
 		public function widget($args,$instance)
@@ -64,7 +70,7 @@
 				
 				foreach($data->videos as $row){
 					echo '<li>';
-					AMQPConnection
+					echo '<a href="'.$baseurl.$row['id'].'" title="'.$row['title'].'">.</a>';
 					echo '<img class="video_icon" src="'.plugins_url('psvimeowidget/images/video-icon.png').'" alt="Play Buton" />';
 					echo '<img class="video_thumbnail" src="'.$row['thumb'].'" alt="'.$row['title'].'"/>';					
 					echo '</li>';
@@ -81,7 +87,7 @@
 			
 			$videos=get_transient('recent_videos');
 						
-			if(!$videos || $videos->album != $album || $videos->limit != $limit){
+			if(!$videos || $videos->album != $album || $videos->limit != $limit || $videos->baseurl != $baseurl){
 				return $this->get_videos($album,$limit);
 			}else{
 				return $videos;
@@ -98,13 +104,14 @@
 			$data=new stdClass();
 			$data->album=$album;
 			$data->limit=$limit;
+			$data->baseurl=$baseurl;
 			$data->videos=array();
 			foreach($video_list as $video){
 				if($limit-- ==0) break;
-				$data->videos[]=array('id'=>$video->id,'url'=>$video->url,'title'=>$video->title,'thumb'=>$video->thumbnail_small);
+				$data->videos[]=array('id'=>$video->id,'title'=>$video->title,'thumb'=>$video->thumbnail_small);
 			}	
 	
-			set_transient('recent_videos', $data, 1*1);
+			set_transient('recent_videos', $data, 60*5);
 
 			return $data;			
 		}
