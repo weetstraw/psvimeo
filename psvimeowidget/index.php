@@ -4,7 +4,7 @@
 	Plugin Name: PS Vimeo Album
 	Plugin URI: http://www.petersurrena.com
 	Description: It's a Vimeo thing
-	Version: 0.5
+	Version: 0.6
 	Author: Peter Surrena
 	Author URI: http://www.petersurrena.com
 	*/
@@ -51,6 +51,12 @@
 			echo '<input class="widefat" max="99" id="'.$this->get_field_id('baseurl').'" name="'.$this->get_field_name('baseurl').'" value="';
 			echo !empty($baseurl) ? esc_attr($baseurl) : 'https://www.vimeo.com/';
 			echo '"/></p>';
+			
+			// Cache
+			echo '<p><label for="'.$this->get_field_id('cache').'">Cache: <em>In Minutes</em></label>';
+			echo '<input class="widefat" min="0" max="9" id="'.$this->get_field_id('cache').'" name="'.$this->get_field_name('cache').'" value="';
+			echo !empty($cache) ? $cache : '5';
+			echo '"/></p>';
 		}
 		
 		public function widget($args,$instance)
@@ -82,20 +88,20 @@
 			}
 		}
 		
-		private function vimeo($album,$limit,$baseurl)
+		private function vimeo($album,$limit,$baseurl,$cache)
 		{
 			if(empty($album)) return false;
 			
 			$videos=get_transient('recent_videos');
 						
-			if(!$videos || $videos->album != $album || $videos->limit != $limit || $videos->baseurl != $baseurl){
-				return $this->get_videos($album,$limit,$baseurl);
+			if(!$videos || $videos->album != $album || $videos->limit != $limit || $videos->baseurl != $baseurl || $cache->baseurl != $cache){
+				return $this->get_videos($album,$limit,$baseurl,$cache);
 			}else{
 				return $videos;
 			}
 		}
 		
-		private function get_videos($album,$limit,$baseurl)
+		private function get_videos($album,$limit,$baseurl,$cache)
 		{
 			$video_list=wp_remote_get('http://www.vimeo.com/api/v2/album/'.$album.'/videos.json');
 			$video_list=json_decode($video_list['body']);
@@ -112,7 +118,7 @@
 				$data->videos[]=array('id'=>$video->id,'title'=>$video->title,'thumb'=>$video->thumbnail_small);
 			}	
 	
-			set_transient('recent_videos', $data, 60*5);
+			set_transient('recent_videos', $data, 60*$cache);
 
 			return $data;			
 		}
@@ -120,7 +126,7 @@
 	
 	function ps_load_style()
 	{
-		wp_enqueue_style("psvimeo_style", plugin_dir_url( __FILE__ ).'/psvimeo.css', array(), '0.1', 'screen' );
+		wp_enqueue_style("psvimeo_style", plugin_dir_url( __FILE__ ).'psvimeo.css', array(), '0.1', 'screen' );
 	}
 	
 	function ps_register_vimeo()

@@ -1,6 +1,6 @@
-#PS Vimeo Widget v0.5
+#PS Vimeo Widget v0.6
 
-Wordpress plugin to display a list videos in a Vimeo album
+Wordpress plugin to display a list of thumbnails from a Vimeo album
 
 ###Compatibility
 _PS Vimeo Widget_ has been tested on Wordpress 3.5.1
