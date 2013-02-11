@@ -54,7 +54,7 @@
 			
 			// Cache
 			echo '<p><label for="'.$this->get_field_id('cache').'">Cache: <em>In Minutes</em></label>';
-			echo '<input class="widefat" min="0" max="9" id="'.$this->get_field_id('cache').'" name="'.$this->get_field_name('cache').'" value="';
+			echo '<input class="widefat" min="1" max="9" id="'.$this->get_field_id('cache').'" name="'.$this->get_field_name('cache').'" value="';
 			echo !empty($cache) ? $cache : '5';
 			echo '"/></p>';
 		}
@@ -66,7 +66,7 @@
 			
 			if(empty($title)) $title="Videos";
 			
-			$data=$this->vimeo($album,$limit,$baseurl);
+			$data=$this->vimeo($album,$limit,$baseurl,$cache);
 						
 			if(false !== $data && isset($data->videos))
 			{	
@@ -94,7 +94,7 @@
 			
 			$videos=get_transient('recent_videos');
 						
-			if(!$videos || $videos->album != $album || $videos->limit != $limit || $videos->baseurl != $baseurl || $cache->baseurl != $cache){
+			if(!$videos || $videos->album != $album || $videos->limit != $limit || $videos->baseurl != $baseurl || $videos->cache != $cache){
 				return $this->get_videos($album,$limit,$baseurl,$cache);
 			}else{
 				return $videos;
@@ -112,6 +112,7 @@
 			$data->album=$album;
 			$data->limit=$limit;
 			$data->baseurl=$baseurl;
+			$data->cache=$cache;
 			$data->videos=array();
 			foreach($video_list as $video){
 				if($limit-- ==0) break;
